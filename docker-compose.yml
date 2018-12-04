@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: "postgres:${PGVERSION}"
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_USER=sinatra
+      - POSTGRES_PASSWORD=sinatra
+    volumes:
+      - ./data/postgres${PGVERSION}:/var/lib/postgresql/data
+  app:
+    depends_on:
+      - db
+    links:
+      - db
+    build: .
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=sinatra
+      - DATABASE_USER=sinatra
+      - DATABASE_PASSWORD=sinatra
