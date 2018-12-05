@@ -1,0 +1,39 @@
+#+TITLE: Rhymer
+
+珠玉のダジャレ生成プロジェクトレポジトリ Rhymer
+
+* 現状
+
+Docker で、
+
+1. [[https://github.com/neologd/mecab-unidic-neologd][mecab-unidic-NEologd]] で make された CSV を作ります。
+2. CSV ファイルから単語を PostgreSQL のデータベースに流し込みます。(=create-db.sh=)
+3. Happy rhyming!
+
+
+* How to use
+準備
+
+#+BEGIN_SRC sh
+export PGVERSION=11 # or 10, 9, ...
+docker-compose down
+docker-compose up --build -d
+docker-compose run app ./create-db.sh
+#+END_SRC
+
+=./create-db.sh= で CSV からデータベースへデータを流し込みます。
+
+これで =select-word.rb= のようにすると、Ruby の =String= オブジェクトに ~#dajare~ メソッドが生えます。
+
+** Ruby 実行例
+#+BEGIN_SRC ruby
+require './select-word.rb'
+
+'した'.dajare
+#+END_SRC
+ランダムでその読み方で始まるダジャレが出力されます。
+
+
+
+* Thanks
+- [[https://github.com/neologd/mecab-unidic-neologd][mecab-unidic-NEologd]] (mecab の追加用辞書。しょっちゅう新しい単語が追加されている)
