@@ -34,6 +34,69 @@ require './select-word.rb'
 ランダムでその読み方で始まるダジャレが出力されます。
 
 
+* Benchmarks
+** Creating DB
+
+#+BEGIN_SRC sh
+export PGVERSION=11
+docker-compose down
+docker-compose up --build -d
+time docker-compose run app ./create-db.sh
+#+END_SRC
+
+のベンチマーク
+
+PostgreSQL 11
+#+BEGIN_SRC
+1.03user 0.15system 0:18.60elapsed 6%CPU (0avgtext+0avgdata 47632maxresident)k
+0inputs+8outputs (0major+25368minor)pagefaults 0swaps
+#+END_SRC
+
+PostgreSQL 10
+#+BEGIN_SRC
+1.00user 0.18system 0:18.11elapsed 6%CPU (0avgtext+0avgdata 45760maxresident)k
+0inputs+8outputs (0major+25251minor)pagefaults 0swaps
+#+END_SRC
+
+PostgreSQL 9
+#+BEGIN_SRC
+1.01user 0.17system 0:19.43elapsed 6%CPU (0avgtext+0avgdata 45524maxresident)k
+0inputs+8outputs (0major+25194minor)pagefaults 0swaps
+#+END_SRC
+
+
+** Selecting
+#+BEGIN_SRC sh
+docker-compose run app ruby benchmark-select.rb
+#+END_SRC
+
+- =String.dajare= は Ruby のコードで String に dajare メソッドをはやしたものを多数起動するものです。毎回データベースに接続し直すという雑な実装です。
+- =PostgreSQL select= は、それはあんまりなので1回だけデータベースに接続して、そのまま ~SELECT~ を発行するベンチマークです。
+
+PostgreSQL 11
+#+BEGIN_SRC
+                 user     system      total        real
+String.dajare  1.571993   0.133628   1.705621 ( 27.632465)
+                 user     system      total        real
+PostgreSQL select  0.030765   0.012489   0.043254 ( 49.565850)
+#+END_SRC
+
+PostgreSQL 10
+#+BEGIN_SRC
+                 user     system      total        real
+String.dajare  1.603802   0.152695   1.756497 ( 28.066918)
+                 user     system      total        real
+PostgreSQL select  0.017889   0.025146   0.043035 ( 50.333151)
+#+END_SRC
+
+PostgreSQL 9
+#+BEGIN_SRC
+                 user     system      total        real
+String.dajare  1.897162   0.184556   2.081718 ( 79.409097)
+                 user     system      total        real
+PostgreSQL select  0.017323   0.045738   0.063061 (150.408147)
+#+END_SRC
+
 
 * Thanks
 - [[https://github.com/neologd/mecab-unidic-neologd][mecab-unidic-NEologd]] (mecab の追加用辞書。しょっちゅう新しい単語が追加されている)
