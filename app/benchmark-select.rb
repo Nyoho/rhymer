@@ -20,7 +20,7 @@ Benchmark.bm 10 do |r|
     conn = PG::connect host: host, dbname: database, user: username, password: password
 
     100.times do
-      ['ます', 'てね'].each do |s|
+      ['マス', 'テネ'].each do |s|
         res = conn.exec %Q|select * from Words where reading like '#{conn.escape_string(s)}%'|
       end
     end
