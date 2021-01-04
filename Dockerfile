@@ -1,5 +1,5 @@
-FROM ubuntu:cosmic AS build
-RUN apt-get update -qq && apt-get install -y build-essential git curl libpq-dev postgresql-client mecab libmecab-dev unzip
+FROM ubuntu:focal AS build
+RUN apt-get update -qq && apt-get install -y build-essential git curl libpq-dev postgresql-client mecab libmecab-dev unzip file
 
 WORKDIR /tmp
 
