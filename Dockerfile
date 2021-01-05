@@ -9,7 +9,7 @@ RUN git clone --depth 1 https://github.com/neologd/mecab-unidic-neologd.git \
     && cat build/*neologd*/*.csv | gzip > /tmp/union.csv.gz \
     && cd .. && rm -rf mecab-unidic-neologd
 
-FROM ruby:2.5.3-alpine3.8
+FROM ruby:2.7.2-alpine3.13
 RUN apk upgrade --no-cache && \
     apk add --update --no-cache \ 
       build-base \
